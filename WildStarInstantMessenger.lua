@@ -9,12 +9,6 @@ require "ChatSystemLib"
 require "FriendshipLib"
 require "GroupLib"
 require "GameLib"
---$$$$$$$$$$$$$
---NOTES
---[[
-blah blah blah blah blah blah blah
-]]
---%%%%%%%%%%%%%%
 
 -----------------------------------------------------------------------------------------------
 -- WildStarInstantMessenger Module Definition
@@ -1063,6 +1057,16 @@ function WildStarInstantMessenger:OnInputReturn( wndHandler, wndControl, strText
 			if sendTo and channelCurrent:GetType() == ChatSystemLib.ChatChannel_Whisper then
 				tInput.strMessage = sendTo.." "..tInput.strMessage
 			elseif sendTo and channelCurrent:GetType() == ChatSystemLib.ChatChannel_AccountWhisper then
+				local accountFriends = FriendshipLib.GetAccountList()
+				
+				for idx, acName in pairs(accountFriends) do
+					local curChar = acName.arCharacters
+					for ndx, character in pairs(curChar or {}) do
+						if sendTo == character.strCharacterName then
+							sendTo = acName.strCharacterName
+						end
+					end
+				end
 				tInput.strMessage = sendTo.." "..tInput.strMessage
 			end
 			if channelCurrent and channelCurrent:GetType() == ChatSystemLib.ChatChannel_Command then
